@@ -1,0 +1,16 @@
+#!/bin/bash
+
+# output file name
+output_file="output.txt"
+
+CPU_num=$(nproc)
+Hard_driver_space=$(df -h / | awk 'NR==2 {print $4}')
+memory_usage=$(free -h | awk 'NR==2 {print $3 "/" $2}')
+
+# Write to output file
+echo "CPU number: $CPU_num" > $output_file
+echo "Available hard drive space: $Hard_driver_space" >> $output_file
+echo "Current memory usage: $memory_usage" >> $output_file
+
+# Show the code is finished
+echo "Finished in $output_file !"

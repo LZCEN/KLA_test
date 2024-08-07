@@ -1,0 +1,49 @@
+#include <iostream>
+#include <iomanip>
+#include <chrono>
+#include <vector>
+#include <cstdlib>
+#include <sys/resource.h>
+#include <sys/time.h>
+
+void logMemoryUsage() {
+    struct rusage usage;
+    getrusage(RUSAGE_SELF, &usage);
+    std::cout << "Memory usage: " << usage.ru_maxrss << " KB" << std::endl;
+}
+
+
+int main() {
+    // for measure elapsed time
+    auto start = std::chrono::high_resolution_clock::now();
+   
+    // Generate numerical array
+    std::vector<int> array(10);
+    for (int i = 0; i<10; ++i) {
+        array[i] = i;
+    }
+
+    // Print array on screen
+    int index = 0;
+    for (int row = 1; index < array.size(); ++row) {
+        for (int space = array.size() - row; space > 0; --space) {
+            std::cout << " ";
+        }
+        for (int col = 0; col < row && index < array.size(); ++col) {
+            std::cout << array[index++] << " ";
+        }
+        std::cout << std::endl;
+    }
+    // Stop clock and measure elapsed time
+    auto end = std::chrono::high_resolution_clock::now();
+    std::chrono::duration<double> elapsed = end - start;
+
+    // Log CPU and elapsed time
+     std::cout << "Elapsed time: " << elapsed.count() << " seconds" << std::endl;
+
+     // Log memory usage
+     logMemoryUsage();
+
+     return 0;
+
+}

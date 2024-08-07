@@ -1,0 +1,44 @@
+#!/bin/bash
+
+resume_file_pdf="resume.pdf"
+resume_file_txt="resume.txt"
+output_file="linux_bash_2_output.txt"
+
+# check the resume file exist
+if [ -f "$resume_file_pdf" ]; then
+	# if pdf exist, turn into txt file
+	pdftotext "$resume_file_pdf" "$resume_file_txt"
+	# check transform success or not
+	if [ ! -f "$resume_file_txt" ]; then
+		echo "Fail to tranfer the pdf to txt"
+		exit 1
+	fi
+else
+	# if pdf dosen't exist, check the txt file exist or not
+	if [ ! -f "$resume_file_txt" ]; then
+		echo "$resume_file_txt not exist."
+		exit 1
+	fi
+fi
+
+# Count lines in resume
+Line_count=$(wc -l < "$resume_file_txt")
+
+# Extract 2nd word of each line
+Second_words=$(awk '{print $2}' "$resume_file_txt")
+
+# Extract first and last line
+First_line=$(head -n 1 "$resume_file_txt")
+Last_line=$(tail -n 1 "$resume_file_txt")
+
+# write into output file
+{
+	echo "Number of lines in resume: $Line_count"
+	echo "Second word in each lines:"
+	echo "$Second_words"
+	echo "First line: $First_line"
+	echo "Last line: $Last_line"
+} > "$output_file"
+
+echo "Finished in $output_file"
+
